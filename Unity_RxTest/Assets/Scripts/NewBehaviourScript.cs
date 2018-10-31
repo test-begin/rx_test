@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UniRx;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -48,10 +49,20 @@ public class NewBehaviourScript : MonoBehaviour
             .Where(x => x.node >= 0 && x.node < context.Nodes.Count)
                 .Select(x => new KeyValuePair<VRM.VRMBone, Transform>(x.vrmBone, context.Nodes[x.node]))
                     .ToArray();
+
         foreach (var pair in array)
         {
             Debug.Log(pair);
         }
+
+        UniRx.Observable.Interval(System.TimeSpan.FromSeconds(1))
+            .Subscribe(_ =>
+            {
+                Debug.Log("Execute UniRx.Observable.Interval(System.TimeSpan.FromSeconds(1))");
+                array[26].Value.Rotate(Vector3.forward);
+                array[27].Value.Rotate(Vector3.forward);
+                array[28].Value.Rotate(Vector3.forward);
+            });
     }
 
     void OnLoaded(GameObject root)
